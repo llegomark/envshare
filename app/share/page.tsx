@@ -6,8 +6,7 @@ import { Title } from "@components/title";
 import { encrypt } from "pkg/encryption";
 import { ErrorMessage } from "@components/error";
 import { encodeCompositeKey } from "pkg/encoding";
-
-const LATEST_KEY_VERSION = 2;
+import { LATEST_KEY_VERSION } from "pkg/constants";
 
 export default function Home() {
   const [text, setText] = useState("");
@@ -42,9 +41,10 @@ export default function Home() {
       const compositeKey = encodeCompositeKey(LATEST_KEY_VERSION, id, key);
 
       const url = new URL(window.location.href);
-      url.pathname = `/${compositeKey}`;
+      url.pathname = "/unseal";
+      url.hash = compositeKey;
       setCopied(false);
-      setLink(url.href);
+      setLink(url.toString());
     } catch (e) {
       console.error(e);
       setError((e as Error).message);
